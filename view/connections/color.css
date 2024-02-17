@@ -1,0 +1,38 @@
+.SecondaryBgClr{
+    background-color :#5EBFF0
+    
+}
+.SecondaryClr{
+    color :#5EBFF0
+}
+.primaryBgClr{
+    background-color :#221763
+    
+}
+.primaryClr{
+    color :#221763
+}
+/* @media screen and (max-width: 576px){
+        .text-sm-justify{
+            text-align:justify;
+            white-space: 1px;
+            letter-spacing: 1px;
+            word-wrap: break-word;
+        }
+  } */
+
+
+
+@media screen and (min-width: 576px){
+        .text-xs-justify{
+            text-align: start;
+            color: green;
+        }
+  }
+@media screen and (min-width:721px){
+    #tryout{
+        height: 1400px !important;
+    }
+}
+
+

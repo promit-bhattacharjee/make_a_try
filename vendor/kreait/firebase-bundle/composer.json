@@ -1,0 +1,44 @@
+{
+    "name": "kreait/firebase-bundle",
+    "description": "Symfony Bundle for the Firebase Admin SDK",
+    "keywords": ["firebase", "google", "sdk", "api", "database", "symfony", "bundle", "symfony-bundle"],
+    "homepage": "https://github.com/kreait/firebase-bundle",
+    "license": "MIT",
+    "type": "symfony-bundle",
+    "authors": [
+        {
+            "name": "Jérôme Gamez",
+            "homepage": "https://github.com/jeromegamez"
+        }
+    ],
+    "require": {
+        "php": "^7.4|^8.0",
+        "kreait/firebase-php": "^5.25.0",
+        "symfony/cache": "^5.4|^6.0",
+        "symfony/dependency-injection": "^5.4|^6.0",
+        "symfony/config": "^5.4|^6.0",
+        "symfony/http-kernel": "^5.4|^6.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5.10"
+    },
+    "autoload": {
+        "psr-4": {
+            "Kreait\\Firebase\\Symfony\\Bundle\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Kreait\\Firebase\\Symfony\\Bundle\\Tests\\": "tests"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "funding": [
+        {
+            "type": "github",
+            "url": "https://github.com/sponsors/jeromegamez"
+        }
+    ]
+}

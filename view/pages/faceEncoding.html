@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encodings</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+
+<body>
+    <main>
+        <div class="container"><form action="faceEncodingAction.php" enctype="multipart/form-data" method="post">
+            <!-- image -->
+        <div class="container col-10 col-sm-6">
+            <div class="input-group mt-2 mb-2 ">
+                <input type="file" class="form-control img-fluid" id="userImage" name="userImage" hidden
+                    accept="Image/*">
+                <img id="imagePreview" class="img-fluid" style="display: none;max-height: 600px; object-fit: fill;">
+            </div>
+            <!-- <span id="userAdressAlertText" class=""> -->
+            <h5 class="btn btn-success container w-100" id="imageBtn">Upload Image</h5>
+        </div>
+        <div class="container d-flex justify-content-between col-10 col-sm-6">
+            <button type="submit" class="btn btn-outline-success"> Update
+            </button>
+        </div>
+        </form></div>
+    </main>
+    <script>
+        let imgInput = document.getElementById('userImage');
+document.getElementById('imageBtn').addEventListener('click', () => {
+    imgInput.click();
+});
+let preview = document.getElementById('imagePreview');
+imgInput.addEventListener('change', () => {
+    if (imgInput.files && imgInput.files[0]) {
+        preview.src = URL.createObjectURL(imgInput.files[0]);
+        preview.style.display = 'inline-block';
+    }
+});
+    </script>
+</body>
+
+</html>
