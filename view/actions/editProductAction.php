@@ -25,20 +25,24 @@ class ProductAction
         if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["productId"]) && isset($_POST["submit"])) {
             $this->retrieveData();
             $this->filterData();
-            if(isset($this->imageUpdateStatus)  && $this->imageUpdateStatus === 'true'){
+
+            if (isset($this->imageUpdateStatus) && $this->imageUpdateStatus === 'true') {
                 $this->uploadImage();
+            } else {
+                // If image is not updated, keep the existing path
+                $this->productImagePath = $_POST["productImage"];
             }
+
             $this->updateData();
         }
     }
 
     private function retrieveData()
     {
-        $this->productId=$_POST["productId"];
+        $this->productId = $_POST["productId"];
         $this->productName = $_POST["productName"];
         $this->productCategory = $_POST["productCategory"];
         $this->productPrice = $_POST["productPrice"];
-        $this->productImage = $_FILES["productImage"];
         $this->productBrand = $_POST["productBrand"];
         $this->productWidth = $_POST["productWidth"];
         $this->productHeight = $_POST["productHeight"];
@@ -47,7 +51,6 @@ class ProductAction
         $this->productGender = $_POST["productGender"];
         $this->productDescription = $_POST["productDescription"];
         $this->imageUpdateStatus = $_POST["imageUpdateStatus"];
-        // $this->checkImageUpdated=$_POST["imageUpdated"];
     }
 
     private function filterData()
@@ -64,11 +67,12 @@ class ProductAction
         $this->productGender = $this->connect->real_escape_string($_POST["productGender"]);
         $this->productDescription = $this->connect->real_escape_string($_POST["productDescription"]);
         $this->imageUpdateStatus = $this->connect->real_escape_string($_POST["imageUpdateStatus"]);
-        print_r ($this->productImage);
     }
 
     private function uploadImage()
-    {   
+    {
+        // Update the productImage property to the new file
+        $this->productImage = $_FILES["productImage"];
 
         $fileExtension = pathinfo($this->productImage["name"], PATHINFO_EXTENSION);
         $targetDirectory = "../assets/product_images" . "/" . $this->productName . "_" . $this->productModel . '.' . $fileExtension;
@@ -77,12 +81,12 @@ class ProductAction
             $this->productImagePath = $targetDirectory;
         } else {
             $this->alertMessage("Photo Upload Error");
-        }}
-    
+        }
+    }
 
-        private function updateData()
-        {
-            $sql = "UPDATE `products` SET
+    private function updateData()
+    {
+        $sql = "UPDATE `products` SET
                 `product_name`='$this->productName',
                 `product_price`='$this->productPrice',
                 `product_category`='$this->productCategory',
@@ -96,16 +100,16 @@ class ProductAction
                 `product_colour`='$this->productColour',
                 `updated_at`=CURRENT_TIMESTAMP()
                 WHERE `product_id`=$this->productId";
-        
-            $result = mysqli_query($this->connect, $sql);
-        
-            if ($result) {
-                $this->alertMessage("Product Updated Successfully");
-            } else {
-                $this->alertMessage("Error updating product: " . mysqli_error($this->connect));
-            }
+
+        $result = mysqli_query($this->connect, $sql);
+
+        if ($result) {
+            $this->alertMessage("Product Updated Successfully");
+        } else {
+            $this->alertMessage("Error updating product: " . mysqli_error($this->connect));
         }
-        
+    }
+
     private function alertMessage($message)
     {
         echo "<script>alert('$message');</script>";

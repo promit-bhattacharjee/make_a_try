@@ -13,7 +13,7 @@
       </div>
       <div class="modal-body">
         <section class="d-flex justify-content-center">
-          <form action="view\actions\loginAction.php" class="border-1 botder border-white" method="post">
+          <form action="..\actions\loginAction.php" class="border-1 botder border-white" method="post">
             <!-- email -->
             <div class="container">
               <label for="userEmail">Email</label>

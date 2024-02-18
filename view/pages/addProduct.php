@@ -11,7 +11,7 @@
 </head>
 
 <body>
-
+<?php include("../components/adminSidebar.php")?>
     <main>
         <div class="container-xl mt-4 style= ">
             <form action="../actions/addProductAction.php" method="post" enctype="multipart/form-data">

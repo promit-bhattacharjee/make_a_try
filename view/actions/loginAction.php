@@ -15,7 +15,7 @@ class Login
     $userEmail = $_POST['userEmail'];
     $userPassword = $_POST['userPassword'];
 
-    include "/xampp/htdocs/makeATry/view/connections/database.php";
+    include "../connections/database.php";
     
     $checkEmailQuery = "SELECT * FROM `user` WHERE `user_email`= '$userEmail' LIMIT 1";
     
@@ -37,7 +37,7 @@ class Login
       $_SESSION['user_email'] = $row['user_email'];
       $_SESSION['user_id'] = $row['user_id'];
       echo "<script>window.alert('Welcome, User');</script>";
-      echo "<script>window.location.href = '/makeATry/home.php';</script>";
+      echo "<script>window.location.href = '../pages/home.php';</script>";
       exit(); // Ensure that no further code is executed after the redirection
     } else {
       echo "<script>window.alert('Password Invalid');</script>";

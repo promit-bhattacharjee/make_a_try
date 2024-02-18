@@ -14,56 +14,7 @@
 </head>
 
 <body>
-    <header>
-        <nav class="navbar navbar-light bg-light fixed-top text-white">
-            <div class="container-fluid">
-                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
-                    data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar"
-                    aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <a class="navbar-brand m-auto" href="#">Make A try</a>
-                <div class="offcanvas offcanvas-start bg-dark text-bg-dark" tabindex="-1" id="offcanvasDarkNavbar"
-                    aria-labelledby="offcanvasDarkNavbarLabel">
-                    <div class="offcanvas-header">
-                        <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">Activities</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
-                            aria-label="Close"></button>
-                    </div>
-                    <div class="offcanvas-body bg-white">
-                        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                            <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="adminDashboard.php">DashBoard</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="addProduct.html">Add Product</a>
-                            </li>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="#">Buyer Request</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="#">User Cart Product</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="#">Out of Stock Products</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="#">Users</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="#">View Sales Report</a>
-                            </li>
-                            <hr class="dropdown-divider bg-dark">
-                            <li><a class="dropdown-item" href="#">Logout <i
-                                        class="fa-sharp fa-solid fa-right-from-bracket"></i></a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </nav>
-    </header>
+    <?php require_once("../components/adminSidebar.php")?>
     <main>
         <hr class='mt5'>
         <div class="container-xl px-4 mt-4 style= ">
@@ -96,7 +47,7 @@
 
                         $checkOther = "checked";
                     }
-                    echo "<div class='container-xl mt-4 style= '>
+                    echo "<div class='container-xl'>
                     <form action='../actions/editProductAction.php' method='post' enctype='multipart/form-data'>
                         <div class='container'>
                             <div class='row justify-content-center'>
@@ -196,13 +147,15 @@
                                                     <div class='card-header'>Product Picture</div>
                                                     <div class='card-body text-center input-group'>
                                                         <input type='file' class='form-control img-fluid' id='productImage' name='productImage' hidden
-                                                            accept='Image/*' value='$row[product_image]'>
+                                                            accept='Image/*'>
+                                                        
                                                         <img id='imagePreview' src='$row[product_image]' class='w-100' style='max-height: 300px; object-fit: fill;'>
                                                     </div>
                                                     <h5 class='btn btn-light container w-100' id='imageBtn'>Upload Image</h5>
                                                 </div>
                                                 </div>
                                             </div>
+                                            <input type='text' class='form-control img-fluid' id='' name='productImage' hidden value=$row[product_image]>
                                             <input type='text' class='form-control img-fluid' id='productId' name='productId' hidden value='$productId' >
                                             <input type='text' class='form-control img-fluid' id='imageUpdateStatus' name='imageUpdateStatus' value='false' hidden>
                                             <!-- Save changes button-->
@@ -231,8 +184,9 @@
     let imgInput = document.getElementById('productImage');
     let imageUpdateStatus = document.getElementById('imageUpdateStatus');
     let preview = document.getElementById('imagePreview');
-    
+    // imgInput.value=preview.src
     document.getElementById('imageBtn').addEventListener('click', () => {
+        // imgInput.type="file";
         imgInput.click();
     });
 
