@@ -1,4 +1,5 @@
 <?php
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['imageDataInput'])) {
     // Get the base64-encoded image data from the POST request
     $base64ImageData = $_POST['imageDataInput'];
@@ -16,8 +17,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['imageDataInput'])) {
     // Create a cURL file object for file upload
     $file = curl_file_create($tempFilename, mime_content_type($tempFilename), basename($tempFilename));
 
-    // Send the image file to the Flask API using cURL
-    $apiEndpoint = 'https://47ea-35-229-121-37.ngrok-free.app'.'/api/detect_landmarks';  // Replace with your actual Flask API endpoint
+    // Update ngrok URL based on the currently generated URL
+    $apiEndpoint = 'https://9e38-35-229-121-37.ngrok-free.app' . '/api/detect_landmarks';
     $postData = ['image' => $file];
 
     $ch = curl_init($apiEndpoint);
@@ -28,30 +29,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['imageDataInput'])) {
 
     $response = curl_exec($ch);
 
-    $response = curl_exec($ch);
-
-if ($response === false) {
-    echo "Error: " . curl_error($ch);
-} else {
-    // Print the response for debugging
-    echo "API Response: " . $response;
-    
-    // Check if Flask API returned a valid response
-    $decodedResponse = json_decode($response, true);
-    if ($decodedResponse && isset($decodedResponse['distance'])) {
-        // Display the Flask API response (measurement)
-        echo "Distance: " . $decodedResponse['distance'];
+    if ($response === false) {
+        echo "cURL Error: " . curl_error($ch);
     } else {
-        echo "Error: Invalid response from Flask API";
+        // Print the response for debugging
+        echo "API Response: " . $response;
+
+        // Check if Flask API returned a valid response
+        $decodedResponse = json_decode($response, true);
+        if ($decodedResponse) {
+            print_r($decodedResponse);
+            // Display the Flask API response (measurement)
+            // echo "Standard Width: " . $decodedResponse['standard_width'];
+            // echo "Min Width: " . $decodedResponse['min_width'];
+            // echo "Max Width: " . $decodedResponse['max_width'];
+        } else {
+            echo "Error: Invalid response from Flask API";
+        }
     }
-}
 
     // Close cURL resource and remove the temporary file
     curl_close($ch);
     unlink($tempFilename);
     exit;
 }
+
 ?>
+
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -61,7 +67,10 @@ if ($response === false) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Camera Capture</title>
     <!-- Bootstrap CSS -->
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link rel="stylesheet" href="../connections/color.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 
 <body>
@@ -92,11 +101,18 @@ if ($response === false) {
         </div>
     </div>
     </main>
-    
+    <?php 
+    include("../components/footer.php")
+    ?>
     <!-- Bootstrap JS and Popper.js (required for Bootstrap) -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {
             const video = document.getElementById('video');

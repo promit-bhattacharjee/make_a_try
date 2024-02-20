@@ -1,7 +1,7 @@
-<?php      
+<?php
 session_start();
- 
- ?>
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -18,9 +18,9 @@ session_start();
 
 <body class="primaryBgClr">
   <header class="SecondaryBgClr">
-<?php
-include("../components/navbar.php");
-?>
+    <?php
+    include("../components/navbar.php");
+    ?>
     <div class="container-fluid pb-4"
       style="background-image: url('../assets/bg/headerBgRight.svg');background-repeat: no-repeat;background-size: cover; background-color: rgba(34, 23, 99,0.75);">
       <div class="row d-flex justify-content-around">
@@ -30,15 +30,20 @@ include("../components/navbar.php");
           <p class="text-light fw-light display-6">We provide an interactive experience in which a real world
             environment<br>
             enhanced with computer-generated visual elements</p>
-            <div class="container d-flex justify-content-start">
+          <div class="container d-flex justify-content-start">
             <!-- signUP -->
-            <?php include("../components/signUp.php")?>
+
+            <?php
+            if (!isset($_SESSION['user_email']) && !isset($_SESSION['user_id'])) {
+              include("../components/signUp.php");
+            }
+            ?>
             <div class="col-1"></div>
             <!-- login -->
-            <?php 
-            if(!isset($_SESSION['user_email']) && !isset($_SESSION['user_id'])){
+            <?php
+            if (!isset($_SESSION['user_email']) && !isset($_SESSION['user_id'])) {
               include("../components/login.php");
-             }
+            }
             ?>
           </div>
         </div>
@@ -110,9 +115,9 @@ include("../components/navbar.php");
         </div>
       </div>
     </section>
-    <section class="position-fixed " style="bottom:20px;right:20px">
-    <a class="btn btn-outline-dark p-3 " href="#">Cart <i class="fa-solid fa-cart-shopping"></i></a>
-    </section>
+    <?php
+    include("../components/cartBottom.php")
+      ?>
   </main>
   <!-- footer -->
   <?php include("../components/footer.php") ?>
@@ -123,4 +128,5 @@ include("../components/navbar.php");
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
   <script src="validate.js"></script>
 </body>
+
 </html>

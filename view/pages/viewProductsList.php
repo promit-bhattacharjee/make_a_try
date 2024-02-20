@@ -1,71 +1,28 @@
 <?php
+
+use GuzzleHttp\Psr7\Header;
+
 class viewProductsList
 { 
-    private $pageIndexValue=0,$numberOfpages;
+    private $pageIndexValue, $numberOfpages;
     private $connect;
 
     function __construct()
     {
         include '../connections/database.php';
         $this->connect = $connect;
+        $this->pageIndexValue = isset($_GET['page']) ? ($_GET['page'] - 1) * 32 : 0;
         $this->fetchData();
+        $this->pagination();
     }
-    private function totalPageCount()
-    {
-        $query = "SELECT COUNT(*) as total FROM products";
-        $result = mysqli_query($this->connect, $query);
-
-        if ($result) {
-            $row = mysqli_fetch_assoc($result);
-            $totalDataInDataBase = $row['total'];
-            // mysqli_free_result($result);
-            return ceil( $totalDataInDataBase/32);
-        } else {
-            echo "Error: " . mysqli_error($this->connect);
-        }
-    }
-    private function pagination()
-    {
-        $left=null;
-        $center=null;
-        $right=null;
-         if($this->pageIndexValue===0){
-            $left=1;
-        $center=2;
-        $right=3;
-         }else{
-            $left=$this->pageIndexValue/32;
-            $center=$left+1;
-            $right=$center+1;
-         }
-        echo "<nav aria-label='Page navigation example'>
-        <ul class='pagination'>
-          <li class='page-item'>
-            <a class='page-link' href='#' aria-label='Previous'>
-              <span aria-hidden='true'>&laquo;</span>
-            </a>
-          </li>
-          <li class='page-item'><a class='page-link'href='javascript:void(0)' onclick='$this-> '>$left</a></li>
-          <li class='page-item'><a class='page-link' href='#'>$center</a></li>
-          <li class='page-item'><a class='page-link' href='#'>$right</a></li>
-          <li class='page-item'>
-            <a class='page-link' href='#' aria-label='Next'>
-              <span aria-hidden='true'>&raquo;</span>
-            </a>
-          </li>
-        </ul>
-      </nav>
-      ";
-    }
-
     private function fetchData()
     {
-        $this->numberOfpages = $this->totalPageCount();
-        $query = "SELECT `product_id`, `product_name`, `product_price`, `product_category`, `product_description`, `product_status`, `product_width`, `product_image`, `product_height`, `product_brand`, `product_gender`, `product_model`, `product_colour`, `created_at`, `updated_at` FROM `products` WHERE 1 LIMIT 32 OFFSET $this->pageIndexValue";
+        $query = "SELECT * FROM `products` WHERE product_status='active' LIMIT 32 OFFSET $this->pageIndexValue";
         $allData = mysqli_query($this->connect, $query);
+
         while ($row = mysqli_fetch_array($allData)) {
             echo
-                "
+            "
             <div class='mt-3 card col-xxl-3 col-md-5 col-xl-3 d-flex justify-content-evenly rounded '>
                 <img src='$row[product_image]' class='card-img-top'>
                 <div class='card-body'>
@@ -97,14 +54,68 @@ class viewProductsList
                             </div>
                         </li>
                     </ul>
-                    <a href='#' class='btn btn-dark card-link d-flex justify-content-center'>Another link</a>
-                </div>
+                    <a href='"."http://localhost/makeATry/view/actions/addToCartAction.php? productId=$row[product_id]' class='btn btn-dark card-link d-flex justify-content-center'>Add To Cart</a>
+                    </div>
             </div>
             ";
         }
-        $this->pagination();
     }
 
+    private function totalPageCount()
+    {
+        $query = "SELECT COUNT(*) as total FROM products";
+        $result = mysqli_query($this->connect, $query);
+
+        if ($result) {
+            $row = mysqli_fetch_assoc($result);
+            $totalDataInDataBase = $row['total'];
+            return ceil($totalDataInDataBase / 32);
+        } else {
+            echo "Error: " . mysqli_error($this->connect);
+        }
+    }
+
+    private function pagination()
+    {
+        $this->numberOfpages = $this->totalPageCount();
+        echo "<div class='d-flex justify-content-center overflow-scroll mt-4'>
+                <nav aria-label='Page navigation example'>
+                    <div class='pagination-container' style='max-height: 200px; overflow-y: auto;'>
+                        <ul class='pagination'>";
+    
+        if ($this->pageIndexValue > 0) {
+            $prevPage = $this->pageIndexValue / 32;
+            echo "<li class='page-item'>
+                    <a class='page-link' href='?page=$prevPage' aria-label='Previous'>
+                        <span aria-hidden='true'>&laquo;</span>
+                    </a>
+                </li>";
+        }
+    
+        for ($i = 1; $i <= $this->numberOfpages; $i++) {
+            $currentPage = $i;
+            echo "<li class='page-item" . ($currentPage == ($this->pageIndexValue / 32 + 1) ? " active" : "") . "'>";
+            if ($currentPage == ($this->pageIndexValue / 32 + 1)) {
+                echo "<span class='page-link' style='color: red; cursor: default;'>$i</span>";
+            } else {
+                echo "<a class='page-link' href='?page=$currentPage'>$i</a>";
+            }
+            echo "</li>";
+        }
+    
+        if ($this->pageIndexValue < ($this->numberOfpages - 1) * 32) {
+            $nextPage = $this->pageIndexValue / 32 + 2;
+            echo "<li class='page-item'>
+                    <a class='page-link' href='?page=$nextPage' aria-label='Next'>
+                        <span aria-hidden='true'>&raquo;</span>
+                    </a>
+                </li>";
+        }
+    
+        echo "</ul></div></nav></div>";
+    }
+    
+    
 }
 ?>
 
@@ -117,58 +128,29 @@ class viewProductsList
     <title>adminDashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="../connections/color.css">
-
-    <style>
-        .card {
-            height: 300px;
-
-            position: relative;
-            overflow: hidden;
-            border: 1px solid #dee2e6;
-        }
-
-        .card-img-top {
-
-            flex: 1;
-            transition: opacity 0.3s ease-in-out;
-        }
-
-        .card-body {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: white;
-            transition: transform 0.3s ease-in-out;
-            transform: translateY(100%);
-            padding: 10px;
-            box-sizing: border-box;
-        }
-
-        .card:hover .card-img-top {
-            opacity: 0;
-        }
-
-        .card:hover .card-body {
-            transform: translateY(-100%);
-        }
-    </style>
+    <link rel="stylesheet" href="../connections/color.css"> 
+    <link rel="stylesheet" href="../connections/productView.css">
 </head>
 
 <body>
-    <?php include("../components/navbar.php") ?>
-    <main>
 
-        <div class=" d-flex justify-content-around row">
+    <?php include("../components/navbar.php");
+    
+    ?>
+    <div class="container">
+        <?php include("productSearch.php");?>
+    </div>
+    <!-- <div class="container" style="height:300px"></div> -->
+    <main>
+        <div class="d-flex justify-content-around row">
             <?php new viewProductsList() ?>
         </div>
-        <?php
-        // $pagenation = new viewProductsList();
-        // $pagenation->pagination(); 
-        ?>
+        <?php 
+        include("../components/cartBottom.php");
+        include("../components/footer.php"); ?>
+
     </main>
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
