@@ -38,7 +38,7 @@
                   href="#">User</a>
               </button>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="editProfile.php">Profile <i class="fa-solid fa-user"></i>
+                <li><a class="dropdown-item" href="../pages/userDashBoard.php">Profile <i class="fa-solid fa-user"></i>
                   </a></li>
           </li>
 

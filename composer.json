@@ -1,6 +1,7 @@
 {
     "require": {
         "kreait/firebase-php": "^5.26",
-        "kreait/firebase-bundle": "^3.1"
+        "kreait/firebase-bundle": "^3.1",
+        "twilio/sdk": "^7.15"
     }
 }

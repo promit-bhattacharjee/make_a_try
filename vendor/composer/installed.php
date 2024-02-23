@@ -3,7 +3,7 @@
         'name' => '__root__',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '0f04297d3bc4b45d710dcfb9174976e59f639ece',
+        'reference' => '636e12f0d9ebcc2fc908f4424a975c46591995f8',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         '__root__' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '0f04297d3bc4b45d710dcfb9174976e59f639ece',
+            'reference' => '636e12f0d9ebcc2fc908f4424a975c46591995f8',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -283,8 +283,8 @@
         'psr/log-implementation' => array(
             'dev_requirement' => false,
             'provided' => array(
-                0 => '1.0|2.0|3.0',
-                1 => '1.0.0 || 2.0.0 || 3.0.0',
+                0 => '1.0.0 || 2.0.0 || 3.0.0',
+                1 => '1.0|2.0|3.0',
             ),
         ),
         'psr/simple-cache' => array(
@@ -539,6 +539,15 @@
             'reference' => 'df56f53818c2d5d9f683f4ad2e365ba73a3b69d2',
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/var-exporter',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'twilio/sdk' => array(
+            'pretty_version' => '7.15.0',
+            'version' => '7.15.0.0',
+            'reference' => '8a2891e16d56dc205c201226a8208c03a6f588d5',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../twilio/sdk',
             'aliases' => array(),
             'dev_requirement' => false,
         ),

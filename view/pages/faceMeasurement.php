@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['imageDataInput'])) {
     $file = curl_file_create($tempFilename, mime_content_type($tempFilename), basename($tempFilename));
 
     // Update ngrok URL based on the currently generated URL
-    $apiEndpoint = 'https://9e38-35-229-121-37.ngrok-free.app' . '/api/detect_landmarks';
+    $apiEndpoint = 'https://f900-34-16-199-80.ngrok-free.app' . '/api/detect_landmarks';
     $postData = ['image' => $file];
 
     $ch = curl_init($apiEndpoint);

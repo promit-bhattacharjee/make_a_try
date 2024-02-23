@@ -207,7 +207,9 @@ class showData
     if($result){
       $user = mysqli_fetch_array($result);
       $userData=array([
+
         'user_name'=>$user["user_name"],
+        'user_id'=>$user["user_id"],
         'user_mobile'=>$_POST["mobileNumber"],
         'user_payment_id'=>$_POST["paymentId"],
         'user_address'=>$user["user_address"]
@@ -227,6 +229,7 @@ class showData
           $orderDetails[] = [
               'product_details' => [
                   'product_name' => $item['product_name'],
+                  'product_id' => $item['product_id'],
                   'product_model' => $item['product_model'],
                   'product_price' => $item['product_price'],
                   'product_id' => $item['product_id'],
@@ -323,7 +326,7 @@ class showData
   </div>
   </div>
 
-  <div class="fixed-bottom">
+  <div class="">
     <?php include("../components/footer.php") ?>
 
   </div>

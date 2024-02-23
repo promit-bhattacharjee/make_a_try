@@ -26,10 +26,10 @@
                     <a class="nav-link active" aria-current="page" href="../pages/outOfStockProducts.php">Out Of Stock Products</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="../pages/inProducts.php">In stock Products</a>
+                    <a class="nav-link active" aria-current="page" href="../pages/inStockProducts.php">In stock Products</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Users</a>
+                    <a class="nav-link active" aria-current="page" href="../pages/orders.php">Orders</a>
                   </li>
                   <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="#">View Sales Report</a>
