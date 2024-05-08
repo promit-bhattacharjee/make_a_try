@@ -11,14 +11,16 @@
 </head>
 
 <body>
-<?php include("../components/adminSidebar.php")?>
+    <?php include("../components/adminSidebar.php") ?>
     <main>
         <div class="container-xl mt-4 style= ">
             <form action="../actions/addProductAction.php" method="post" enctype="multipart/form-data">
                 <div class="container">
                     <div class="row justify-content-center">
                         <div class="col-xl-8 ">
-                            <!-- Account details -->
+                            <!-- poduct -->
+                            <span id="validationMessage" class="text-danger"></span>
+
                             <div class="card mb-4">
                                 <div class="card-header">Add Product</div>
                                 <div class="card-body">
@@ -96,7 +98,7 @@
                                                         <input class="form-check-input" type="checkbox"
                                                             name="productGender" id="exampleRadios3" value="other">
                                                         <label class="form-check-label" for="exampleRadios3">
-                                                            Other
+                                                            Common
                                                         </label>
                                                     </div>
                                                 </div>
@@ -116,8 +118,9 @@
                                                 <div class="card-body">
                                                     <!-- Add this div for image preview -->
                                                     <div class="card-body text-center input-group">
-                                                        <input type="file" class="form-control img-fluid" id="productImage"
-                                                            name="productImage" hidden accept="Image/*">
+                                                        <input type="file" class="form-control img-fluid"
+                                                            id="productImage" name="productImage" hidden
+                                                            accept="Image/*">
                                                         <img id="imagePreview" class="w-100"
                                                             style="display: none; max-height: 300px;">
                                                     </div>
@@ -127,8 +130,11 @@
                                             </div>
                                         </div>
                                     </div>
+
                                     <!-- Save changes button-->
-                                    <button class="btn btn-primary" type="submit">Upload</button>
+
+                                    <button class="btn btn-primary" type="button"
+                                        onclick="validateForm()">Upload</button>
                                 </div>
                             </div>
                         </div>
@@ -158,6 +164,97 @@
             }
         });
     </script>
+<script>
+    function validateInput(inputElement, regex) {
+        const inputValue = inputElement.value.trim();
+        if (!regex.test(inputValue)) {
+            // If the input doesn't match the regex pattern
+            inputElement.classList.add('is-invalid');
+            return false;
+        } else {
+            // If the input is valid
+            inputElement.classList.remove('is-invalid');
+            return true;
+        }
+    }
+
+    function validateForm() {
+        const productName = document.getElementById('productName');
+        const productCategory = document.getElementById('productCategory');
+        const productPrice = document.getElementById('productPrice');
+        const productBrand = document.getElementById('productBrand');
+        const productWidth = document.getElementById('productWidth');
+        const productHeight = document.getElementById('productHeight');
+        const productModel = document.getElementById('productModel');
+        const productColour = document.getElementById('productColour');
+        const productDescription = document.getElementById('productDescription');
+        const validationMessage = document.getElementById('validationMessage');
+        const nameRegex = /^[a-zA-Z\s]+$/;
+        const categoryRegex = /^[a-zA-Z\s]+$/;
+        const priceRegex = /^\d+(\.\d{1,10})?$/;
+        const brandRegex = /^[a-zA-Z\s]+$/;
+        const widthRegex = /^\d+(\.\d{1,2})?$/;
+        const heightRegex = /^\d+(\.\d{1,2})?$/;
+        const modelRegex = /^[a-zA-Z\d\s]+$/;
+        const colourRegex = /^[a-zA-Z\s]+$/;
+        const descriptionRegex = /^.{10,}$/; 
+
+        let isValid = true;
+
+        if (!validateInput(productName, nameRegex)) {
+            // alert('Invalid input for Name. Please check and try again.');
+            isValid = false;
+        }
+
+        if (!validateInput(productCategory, categoryRegex)) {
+            // alert('Invalid input for Category. Please check and try again.');
+            isValid = false;
+        }
+
+        if (!validateInput(productPrice, priceRegex)) {
+            // alert('Invalid input for Price. Please check and try again.');
+            isValid = false;
+        }
+
+        if (!validateInput(productBrand, brandRegex)) {
+            // alert('Invalid input for Brand. Please check and try again.');
+            isValid = false;
+        }
+
+        if (!validateInput(productWidth, widthRegex)) {
+            // alert('Invalid input for Width. Please check and try again.');
+            isValid = false;
+        }
+
+        if (!validateInput(productHeight, heightRegex)) {
+            // alert('Invalid input for Height. Please check and try again.');
+            isValid = false;
+        }
+
+        if (!validateInput(productModel, modelRegex)) {
+            // alert('Invalid input for Model. Please check and try again.');
+            isValid = false;
+        }
+
+        if (!validateInput(productColour, colourRegex)) {
+            // alert('Invalid input for Colour. Please check and try again.');
+            isValid = false;
+        }
+
+        if (!validateInput(productDescription, descriptionRegex)) {
+            // alert('Invalid input for Description. Please check and try again.');
+            isValid = false;
+        }
+
+        if (isValid) {
+            validationMessage.innerText = ''; 
+            document.forms[0].submit();
+        } else {
+            validationMessage.innerText = 'Invalid input. Please check your input and try again.';
+        }
+    }
+</script>
+
 </body>
 
 </html>

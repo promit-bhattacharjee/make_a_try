@@ -1,3 +1,4 @@
+<?php include("../components/userLoginChecker.php") ?>
 <?php
  session_start();
 class AddToCart
@@ -51,15 +52,14 @@ class AddToCart
                 $insertQuery = "INSERT INTO `carts` (`user_id`, `product_id`, `product_quantity`) VALUES ('$this->userId', '$this->productId', 1)";
                 $insertResult = mysqli_query($this->connect, $insertQuery);
     
-                echo "<script>
-                        alert('Product added to the cart successfully.');
-                        window.location.href = '../pages/viewProductsList.php';
-                      </script>";
+                
     
                 if ($insertResult) {
-                    // Additional code if needed after successful insertion
+                    echo "<script>
+                    window.alert('Product added to the cart successfully.');
+                    window.location.href = '../pages/viewProductsList.php';
+                  </script>";
                 } else {
-                    // Use single quotes around the error message to avoid issues with the alert function
                     echo "<script>
                             alert('Error adding the product to the cart: " . mysqli_error($this->connect) . "');
                             window.location.href = '../pages/viewProductsList.php';

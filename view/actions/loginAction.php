@@ -17,19 +17,17 @@ class Login
 
     private function sanitizeInput($input)
     {
-        // You can add more sanitization or validation as needed
         return mysqli_real_escape_string($this->connect, trim(htmlspecialchars(strtolower($input))));
     }
 
     public function login()
     {
-        $userEmail = $this->sanitizeInput($_POST['userEmail']);
+        $userMobile = $this->sanitizeInput($_POST['userMobile']);
         $userPassword = $this->sanitizeInput($_POST['userPassword']);
 
-        $checkEmailQuery = "SELECT * FROM `users` WHERE `user_email`= '$userEmail' LIMIT 1";
-
+        $checkMobileQuery = "SELECT * FROM `users` WHERE `user_mobile`= '$userMobile' LIMIT 1";
         // Execute the query
-        $ExistEmail = mysqli_query($this->connect, $checkEmailQuery);
+        $ExistEmail = mysqli_query($this->connect, $checkMobileQuery);
 
         // Check for errors in the query execution
         if (!$ExistEmail) {
@@ -40,16 +38,18 @@ class Login
         $row = mysqli_fetch_array($ExistEmail);
 
         if ($row && ($row['user_password']===$userPassword) && $row['role'] === "admin") {
-            $_SESSION['admin'] = $userEmail;
+            $_SESSION['admin'] = $userMobile;
             echo "<script>window.alert('Welcome, Admin');</script>";
         } elseif ($row && ($row['user_password']===$userPassword) && $row['role'] === "users") {
-            $_SESSION['user_email'] = $row['user_email'];
+            $_SESSION['user_mobile'] = $row['user_mobile'];
             $_SESSION['user_id'] = $row['user_id'];
-            echo "<script>window.alert('Welcome, users');</script>";
+            echo "<script>window.alert('Welcome, $row[user_name]');</script>";
             echo "<script>window.location.href = '../pages/home.php';</script>";
             exit(); // Ensure that no further code is executed after the redirection
         } else {
             echo "<script>window.alert('Password Invalid');</script>";
+            echo "<script>window.location.href = '../pages/home.php';</script>";
+
         }
     }
 }

@@ -1,19 +1,21 @@
 <?php
 
 session_start();
+
 class OrderProcessor
 {
-    private $connect;
-    private $orderId;
-    private $userName;
-    private $userId;
-    private $userEmail;
-    private $userMobile;
-    private $userAddress;
-    private $userPaymentId;
-    private $orderTime;
+    private $connect = '';
+    private $orderId = '';
+    private $userName = '';
+    private $userId = '';
+    private $userEmail = '';
+    private $userMobile = '';
+    private $userAddress = '';
+    private $userPaymentId = '';
+    private $orderTime = '';
     private $productDetails = [];
-    private $totalAmount;
+    private $totalAmount = '';
+
     public function __construct()
     {
         require("../connections/database.php");
@@ -51,7 +53,6 @@ class OrderProcessor
             $result[] = $tempResult;
         }
 
-
         return $result;
     }
 
@@ -59,92 +60,77 @@ class OrderProcessor
     {
         $data = json_decode($jsonData, true);
         $result = $this->processJsonData($data);
-        for ($i = 0; $i <= count($result) - 3; $i++) {
-            $this->productDetails[$i] = json_encode($result[$i]);
-        }
-        // for($i=0;$i<=count($result)-3;$i++) {
-        //     // $this->productDetails[$i]=json_encode($result[$i]);
-        //     echo $this->productDetails[$i];
-        // }
 
+        // Process product details
+        for ($i = 0; $i < count($result) - 2; $i++) {
+            $this->productDetails[] = json_encode($result[$i]);
+        }
+
+        // Process user details
         $userDetails = $result[count($result) - 2];
         $this->userName = $userDetails['user_name'];
         $this->userId = $_SESSION['user_id'];
         $this->userMobile = $userDetails['user_mobile'];
         $this->userPaymentId = $userDetails['user_payment_id'];
         $this->userAddress = $userDetails['user_address'];
-        // 
 
-        $totalAmountAry = $result[count($result) - 1];
-        $this->totalAmount = $totalAmountAry["total_amount"];
+        // Process total amount
+        $totalAmountDetails = $result[count($result) - 1];
+        $this->totalAmount = $totalAmountDetails["total_amount"];
+
+        // Insert data into the orders table
         $jsonProductData = json_encode($this->productDetails);
-        $sql = "INSERT INTO `orders` (user_name, user_id, user_email, user_mobile, user_address, user_payment_id, order_time, product_details, total_amount, status) VALUES ('$this->userName', '$this->userId', '$this->userEmail', '$this->userMobile', '$this->userAddress', '$$this->userPaymentId', CURRENT_TIMESTAMP, '$jsonProductData', $this->totalAmount, 'pending')";
+        $sql = "INSERT INTO `orders` (user_name, user_id, user_mobile, user_address, user_payment_id, order_time, product_details, total_amount, status) VALUES ('$this->userName', '$this->userId', '$this->userMobile', '$this->userAddress', '$this->userPaymentId', CURRENT_TIMESTAMP, '$jsonProductData', $this->totalAmount, 'pending')";
+
         $queryResult = mysqli_query($this->connect, $sql);
+
         if ($queryResult) {
-            return $this->userId;
+
+            return $_SESSION['user_id'];
         } else {
             // Add an error message or log the error
             $errorMessage = mysqli_error($this->connect);
             echo "Error inserting data: $errorMessage";
         }
-
     }
+
     public function deleteCartFromDatabase($id)
     {
-
         $sql = "DELETE FROM `carts` WHERE user_id=$id";
         $queryResult = mysqli_query($this->connect, $sql);
+
         return $queryResult;
     }
 
-
-    // public function displayProcessedData($result) {
-    //     echo "<pre>";
-    //     print_r($result);
-    //     echo "</pre>";
-    // }
     public function generatePdf()
     {
-        $pdf = new TCPDF();
-        $pdf->SetAutoPageBreak(true, PDF_MARGIN_BOTTOM);
-
-        $pdf->AddPage();
-        $pdf->SetFont('times', '', 12);
-
-        // Add order details to the PDF
-        $pdf->Cell(0, 10, 'Order ID: ' . $this->orderId, 0, 1);
-        $pdf->Cell(0, 10, 'User Name: ' . $this->userName, 0, 1);
-        $pdf->Cell(0, 10, 'User ID: ' . $this->userId, 0, 1);
-        $pdf->Cell(0, 10, 'User Email: ' . $this->userEmail, 0, 1);
-        $pdf->Cell(0, 10, 'User Mobile: ' . $this->userMobile, 0, 1);
-        $pdf->Cell(0, 10, 'User Address: ' . $this->userAddress, 0, 1);
-        $pdf->Cell(0, 10, 'User Payment ID: ' . $this->userPaymentId, 0, 1);
-        $pdf->Cell(0, 10, 'Order Time: ' . $this->orderTime, 0, 1);
-
-        // Add product details to the PDF
-        // $productDetails = json_decode($this->productDetails);
-        foreach ($this->productDetails as $detail) {
-            $pdf->Cell(0, 10, 'Product Name: ' . $detail['product_name'], 0, 1);
-            $pdf->Cell(0, 10, 'Product ID: ' . $detail['product_id'], 0, 1);
-            $pdf->Cell(0, 10, 'Product Model: ' . $detail['product_model'], 0, 1);
-            $pdf->Cell(0, 10, 'Product Price: ' . $detail['product_price'], 0, 1);
-            $pdf->Cell(0, 10, 'Product Quantity: ' . $detail['product_quantity'], 0, 1);
-        }
-
-        // Add total amount to the PDF
-        $pdf->Cell(0, 10, 'Total Amount: ' . $this->totalAmount, 0, 1);
-
-        // Output the PDF
-        $pdf->Output('output.pdf', 'D');
+        // Your PDF generation code here
     }
-
 }
+
 $orderProcessor = new OrderProcessor();
 $jsonData = $_GET['jsonData'];
-$id = $orderProcessor->insertOrdersIntoDatabase($jsonData);
-if ($id) {
-    $result = $orderProcessor->deleteCartFromDatabase($id);
-    if ($result) {
-        header("location:../pages/home.php");
+    $data2=json_decode($jsonData,true);
+if (isset($_GET['jsonData']) && count(array_keys($data2))>2) {
+    $id = $orderProcessor->insertOrdersIntoDatabase($jsonData);
+
+    if ($id) {
+        $result = $orderProcessor->deleteCartFromDatabase($id);
+
+        if ($result) {
+            echo "<script>
+            alert('Order Placed')
+            window.location.href = '../pages/home.php';</script>";
+            exit(); // Add exit after header to prevent further execution
+        }
     }
 }
+else{
+    echo "<script>
+    alert('Place select an item')
+    window.location.href = '../pages/cart.php';</script>";
+    exit;
+}
+$jsonData = ""; // Reset jsonData after processing
+
+?>

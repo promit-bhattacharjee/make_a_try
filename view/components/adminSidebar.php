@@ -32,10 +32,10 @@
                     <a class="nav-link active" aria-current="page" href="../pages/orders.php">Orders</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">View Sales Report</a>
+                    <a class="nav-link active" aria-current="page" href="#">View Sales Report(Comming Soon)</a>
                   </li>
                   <hr class="dropdown-divider bg-dark">
-                  <li><a class="dropdown-item" href="#">Logout <i class="fa-sharp fa-solid fa-right-from-bracket"></i></a>
+                  <li><a class="dropdown-item" href="../connections/sessionDistroy.php">Logout <i class="fa-sharp fa-solid fa-right-from-bracket"></i></a>
                   </li>
                 </ul>
               </div>

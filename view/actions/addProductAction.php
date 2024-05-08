@@ -126,6 +126,7 @@ class AddProduct
     private function allertMessage($message)
     {
         echo "<script>alert('$message');</script>";
+        header("Location: ../pages/addProduct.php");
         exit;
     }
 }

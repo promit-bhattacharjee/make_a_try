@@ -2,7 +2,7 @@
 session_start();
 
 if(isset($_SESSION['admin'])){
-
+  $_SERVER['SCRIPT_NAME']	;
 }
 else{
   header("Location: home.html");

@@ -6,50 +6,46 @@ session_start();
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>home</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-  <link rel="stylesheet" href="../connections/color.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
+  <title>HomePage</title>
+  <?php include("../components/homePageHeader.php") ?>
 </head>
 
-<body class="primaryBgClr">
-  <header class="SecondaryBgClr">
+<body class="">
+  <header class="bg-white">
     <?php
     include("../components/navbar.php");
     ?>
-    <div class="container-fluid pb-4"
-      style="background-image: url('../assets/bg/headerBgRight.svg');background-repeat: no-repeat;background-size: cover; background-color: rgba(34, 23, 99,0.75);">
-      <div class="row d-flex justify-content-around">
-        <div class="align-self-center col-xs-10 col-12 col-xl-12 col-xxl-4">
-          <h1 class="text-light display-1 fw-bold">Optical
-            Reality</h1>
-          <p class="text-light fw-light display-6">We provide an interactive experience in which a real world
-            environment<br>
-            enhanced with computer-generated visual elements</p>
-          <div class="container d-flex justify-content-start">
-            <!-- signUP -->
 
-            <?php
-            if (!isset($_SESSION['user_email']) && !isset($_SESSION['user_id'])) {
-              include("../components/signUp.php");
-            }
-            ?>
-            <div class="col-1"></div>
-            <!-- login -->
-            <?php
-            if (!isset($_SESSION['user_email']) && !isset($_SESSION['user_id'])) {
-              include("../components/login.php");
-            }
-            ?>
+    <section style="height:600px" id="header" class="bg-dark">
+      <div class="container-fluid pb-4 h-100"
+      style="background-image: url('../assets/bg/headerBgRight.svg');background-repeat: no-repeat;background-size: cover; background-color: rgba(34, 23, 99,0.75);">
+      <div class="contaner"style="height:250px" ></div>
+        <div class="row d-flex justify-content-around">
+          <div class="align-self-center col-xs-10 col-12 col-xl-12 col-xxl-4">
+            <h1 class="text-light display-1 fw-bold">MAKE A TRY</h1>
+            <p class="text-light fw-light display-6">See the World Differently<br> Where Style Meets Clarity at Make a Try!<br>
+            </p>
+            <div class="container d-flex justify-content-start">
+              <!-- signUP -->
+
+              <?php
+              if (!isset($_SESSION['user_mobile'])  && !isset($_SESSION['user_id'])) {
+                include("../components/signUp.php");
+              }
+              ?>
+              <div class="col-1"></div>
+              <!-- login -->
+              <?php
+              if (!isset($_SESSION['user_mobile']) && !isset($_SESSION['user_id'])) {
+                include("../components/login.php");
+              }
+              ?>
+            </div>
           </div>
+          <img class="col-xs-6 col-xl-4 col-xxl-4 col-sm-12" src="assets/image/headerRightImage.svg" alt="">
         </div>
-        <img class="col-xs-6 col-xl-4 col-xxl-4 col-sm-12" src="assets/image/headerRightImage.svg" alt="">
       </div>
-    </div>
+    </section>
   </header>
   <main>
     <!-- text and banner -->
@@ -58,18 +54,76 @@ session_start();
         style="background-image:url('../assets/bg/Oohapebg.svg');background-color: #221763;background-repeat: no-repeat;background-size: contain; background-position: right;">
         <div
           class="row justify-content-lg-start justify-content-md-start justify-content-lg-start justify-content-xl-around justify-content-xxl-around ">
-          <!-- <div class="col-xxl-2 d-sm-none d-md-none d-lg-none d-xl-none d-xxl-block"></div> -->
-          <div class="text-white text-xs-justify display-6 mt-5 col-md-12 col-lg-12 col-xl-3 col-xxl-3 pb-xl-4">
-            Augmented reality is an
-            interactive
-            experience in which a real world environment is enhanced with computer-generated visual elements,
-            sounds,
-            and other stimuli. It can provide a user with a heightened, more immersive experience than they would
-            experience otherwise that adds to the user's enjoyment or understanding.
+          <div class="text-white text-xs-justify display-6 mt-5 col-md-12 col-lg-12 col-xl-3 col-xxl-3 pb-xl-4"
+            style="font-size:20px;text-align:justify">
+            <br>
+            <br>
+            🌟Welcome to "Make a Try" <br> Your Ultimate Glass Destination!🌟
+            <br>
+            <br>
+            Explore a world of style and clarity at our glass store! Discover a stunning collection that transcends
+            trends and embraces timeless elegance. From chic eyewear to trendy sunglasses, we have the perfect frames
+            for every face.
+            <br>
+            <br>
+            ✨Why Choose "Make a Try"? ✨
+            <br>
+            <br>
+            👓Extensive Collection: Find frames that match your unique style.
+            <br>
+            <br>
+            😎Sunglasses Galore: Shield your eyes in style with our trendy sunglasses.
+            <br>
+            <br>
+            🔍Precision Clarity: Experience crystal-clear vision with our high-quality lenses.
+            <br>
+            <br>
+            🌈Fashion Fusion: Blend fashion with function for the perfect eyewear ensemble.
+            <br>
+            <br>
+            💎Quality Craftsmanship: Impeccable quality that stands the test of time.
           </div>
-          <!-- <div class="col-xl-1 d-sm-none d-block d-xxl-block"></div> -->
           <img class="col-10 col-md-10 col-lg-10 h-auto col-xl-8 col-xxl-8" src="../assets/bg/tryOutBgMale.svg" alt=""
             style="object-fit: cover; overflow-x: visible;">
+        </div>
+      </div>
+
+    </section>
+    <!-- carousel -->
+    <section class="m-0">
+      <div class="test-white h1 font-weight-bold text-center bg-light mb-0 py-3 display-2">CATEGORY</div>
+      <div class="">
+        <div class="row justify-content-around">
+
+          <div id="carouselExampleControls" class="carousel slide " data-bs-ride="carousel">
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <img src="../assets/carousel/otpical.svg" class="d-block w-100" alt="Fashion">
+                <div class="carousel-caption d-none d-md-block text-dark">
+                  <h1 class="text-center container pb-4 bg-none">OPTICAL</h1>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <img src="../assets/carousel/sunglass.jpg" class="d-block w-100" alt="Sunglass">
+                <div class="carousel-caption d-none d-md-block">
+                  <h1 class="text-center text-white px-5 py-2">SUN GLASS</h1>
+                </div>
+              </div>
+            </div>
+            <ol class="carousel-indicators">
+              <li data-bs-target="#carouselExampleControls" data-bs-slide-to="0" class="active"></li>
+              <li data-bs-target="#carouselExampleControls" data-bs-slide-to="1"></li>
+            </ol>
+            <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </a>
+          </div>
+
         </div>
       </div>
     </section>
@@ -78,41 +132,8 @@ session_start();
       <div class="container-fluid d-flex justify-content-center align-items-center" id="tryout"
         style="height: 768px; background-image: url('../assets/bg/tryOutbg.svg');background-repeat: no-repeat; background-position: center;background-size:cover;">
         <butto class="btn text-white">
-          <a href="faceEncoding.html" class="text-decoration-none display-1 fw-bolder text-white">TRY NOW</a>
+          <a href="faceMeasurement.php" class="text-decoration-none display-1 fw-bolder text-white">TRY NOW</a>
           </button>
-      </div>
-    </section>
-    <!-- catagory -->
-    <section class="mt-5">
-      <div class="container-fluid">
-        <div class="row justify-content-around">
-          <a class="btn col-xxl-3 col-xl-4 col-lg-5 col-md-5 col-sm-10 col-10" href="#">
-            <div class="container">
-              <img class="h-100 w-100" src="../assets/bg/glassBg.svg" alt="">
-              <h1 class="text-center container bg-white pb-4">Optical</h1>
-            </div>
-          </a>
-          <a class="btn col-xxl-3 col-xl-4 col-lg-5 col-md-5 col-sm-10 col-10" href="#">
-            <div class="container">
-              <img class="h-100 w-100" src="../assets/bg/glassBg.svg" alt="">
-              <h1 class="text-center container bg-white pb-4">Fashion</h1>
-            </div>
-          </a>
-
-          <a class="btn col-xxl-3 col-xl-4 col-lg-5 col-md-5 col-sm-10 col-10" href="#">
-            <div class="container">
-              <img class="h-100 w-100" src="../assets/bg/glassBg.svg" alt="">
-              <h1 class="text-center container bg-white pb-4">Sunglass</h1>
-            </div>
-          </a>
-          <a class="btn col-xxl-5 col-xl-4 col-lg-5 col-md-5 col-sm-10 col-10" href="#">
-            <div class="container">
-              <img class="h-100 w-100" src="../assets/bg/glassBg.svg" alt="">
-              <h1 class="text-center container bg-white pb-4">Sports</h1>
-            </div>
-          </a>
-
-        </div>
       </div>
     </section>
     <?php
@@ -121,12 +142,12 @@ session_start();
   </main>
   <!-- footer -->
   <?php include("../components/footer.php") ?>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
-  <script src="validate.js"></script>
+  <?php include("../components/DomFooter.php") ?>
+<script>
+    $('.carousel').carousel({
+      interval: 2000
+    })
+</script>
 </body>
 
 </html>

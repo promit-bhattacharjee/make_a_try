@@ -1,4 +1,4 @@
-<button type="button" class="btn primaryBgClr text-white py-2 ml-5" data-bs-toggle="modal" data-bs-target="#exampleModal">
+<button type="button" class=" mt-2 ms-1 mb-2 btn primaryBgClr text-white py-2 ml-5" data-bs-toggle="modal" data-bs-target="#exampleModal">
   Payment
 </button>
 
@@ -12,7 +12,7 @@
       </div>
       <div class="modal-body">
         <section class="d-flex justify-content-center">
-          <form id="paymentForm" class="border-1 border border-white" method="post" action="../pages/cart.php" onsubmit="return validateForm()">
+          <form id="paymentForm" class="border-1 border border-white" action="" method="post"  onsubmit="return validateForm()">
             <!-- Payment ID -->
             <div class="container">
               <label for="paymentId">Payment ID</label>

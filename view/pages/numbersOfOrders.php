@@ -26,21 +26,25 @@ class OrderProcessor
             default:
                 return false;
         }
-        $updateSql = "UPDATE `orders` SET `status` = '$status' WHERE `order_id` = '$orderId'";
-        $updateResult = mysqli_query($this->connect, $updateSql);
+        $updateSql = "UPDATE `orders` SET `status` = ? WHERE `order_id` = ?";
+        $stmt = mysqli_prepare($this->connect, $updateSql);
+        mysqli_stmt_bind_param($stmt, 'si', $status, $orderId);
+        $updateResult = mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
 
         return $updateResult;
     }
 
-
     public function deleteProduct($orderId)
     {
-        $deleteSql = "DELETE FROM `orders` WHERE `order_id` = '$orderId'";
-        $deleteResult = mysqli_query($this->connect, $deleteSql);
+        $deleteSql = "DELETE FROM `orders` WHERE `order_id` = ?";
+        $stmt = mysqli_prepare($this->connect, $deleteSql);
+        mysqli_stmt_bind_param($stmt, 'i', $orderId);
+        $deleteResult = mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+        
         return $deleteResult;
     }
-
-
 }
 
 class OrderManager
@@ -54,13 +58,20 @@ class OrderManager
 
     public function fetchOrders()
     {
-        $sql = "SELECT `order_id`, `user_name`, `user_mobile`, `user_address`, `order_time`, `product_details`, `status` FROM `orders` ORDER BY FIELD(`status`, 'pending', 'accepted', 'delivered')";
-        $result = mysqli_query($this->connect, $sql);
+        $userId = $_SESSION['user_id'];
+        $sql = "SELECT * FROM `orders` WHERE user_id = ? ORDER BY FIELD(`status`, 'pending', 'accepted', 'delivered')";
+        $stmt = mysqli_prepare($this->connect, $sql);
+        mysqli_stmt_bind_param($stmt, 'i', $userId);
+        mysqli_stmt_execute($stmt);
+
+        $result = mysqli_stmt_get_result($stmt);
 
         $orders = [];
         while ($row = mysqli_fetch_assoc($result)) {
             $orders[] = $row;
         }
+
+        mysqli_stmt_close($stmt);
 
         return $orders;
     }
@@ -81,8 +92,8 @@ class OrderManager
         </head>
 
         <body>
-            <?php include("../components/adminSidebar.php"); ?>
-            <div class="contaner" style="height:100px"></div>
+            <?php include("../components/navbar.php"); ?>
+            <div class="container" style="height:100px"></div>
             <div class="container mt-4">
                 <h2 class="mb-4 ">Order Management</h2>
 
@@ -96,14 +107,13 @@ class OrderManager
                             <th>Order Time</th>
                             <th>Product Details</th>
                             <th>Status</th>
-                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($orders as $index=> $order) { ?>
+                        <?php foreach ($orders as $index => $order) { ?>
                             <tr>
                                 <td class="align-middle">
-                                    <?php echo $index+1 ?>
+                                    <?php echo $index + 1 ?>
                                 </td>
                                 <td class="align-middle">
                                     <?php echo $order['user_name']; ?>
@@ -118,72 +128,52 @@ class OrderManager
                                     <?php echo $order['order_time']; ?>
                                 </td>
                                 <td class="align-middle">
-                                        <!-- Button trigger modal -->
-                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                            data-bs-target="#staticBackdrop">
-                                            See product Details
-                                        </button>
+                                    <!-- Button trigger modal -->
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#staticBackdrop<?php echo $index; ?>">
+                                        See product Details
+                                    </button>
 
-                                        <!-- Modal -->
-                                        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static"
-                                            data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
-                                            aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Product Detils</h1>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                            aria-label="Close"></button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <?php
-                                                        $productAry = explode(",", $order["product_details"]);
-                                                        foreach ($productAry as $str) {
-                                                            $outputString = str_replace('["{', '', $str);
-                                                            $outputString2 = str_replace('product_name', "<hr><h6>Product Name", $outputString);
-                                                            $outputString3 = str_replace('"', "", $outputString2);
-                                                            $outputString4 = str_replace(':', " :- ", $outputString3);
-                                                            $outputString5 = str_replace('{', "", $outputString4);
-                                                            $outputString6 = str_replace('}]', "<br>", $outputString5);
-                                                            $outputString7 = str_replace('}', "<br>", $outputString6);
-                                                            $outputString8 = str_replace('product_id', "<br>Product ID", $outputString7);
-                                                            $outputString9 = str_replace('product_model', "<br>Product Model", $outputString8);
-                                                            $outputString10 = str_replace('product_price', "<br>Product Price", $outputString9);
-                                                            $outputString11 = str_replace('product_quantity', "<br>Product Quantity", $outputString10);
-                                                            echo $outputString11;
-                                                        }
-                                                        ?>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary"
-                                                            data-bs-dismiss="modal">Close</button>
-                                                    </div>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="staticBackdrop<?php echo $index; ?>" data-bs-backdrop="static"
+                                        data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                                        aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Product Detils</h1>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <?php
+                                                    $productAry = explode(",", $order["product_details"]);
+                                                    foreach ($productAry as $str) {
+                                                        $outputString = str_replace('["{', '', $str);
+                                                        $outputString2 = str_replace('product_name', "<hr><h6>Product Name", $outputString);
+                                                        $outputString3 = str_replace('"', "", $outputString2);
+                                                        $outputString4 = str_replace(':', " :- ", $outputString3);
+                                                        $outputString5 = str_replace('{', "", $outputString4);
+                                                        $outputString6 = str_replace('}]', "<br>", $outputString5);
+                                                        $outputString7 = str_replace('}', "<br>", $outputString6);
+                                                        $outputString8 = str_replace('product_id', "<br>Product ID", $outputString7);
+                                                        $outputString9 = str_replace('product_model', "<br>Product Model", $outputString8);
+                                                        $outputString10 = str_replace('product_price', "<br>Product Price", $outputString9);
+                                                        $outputString11 = str_replace('product_quantity', "<br>Product Quantity", $outputString10);
+                                                        echo $outputString11;
+                                                    }
+                                                    ?>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-bs-dismiss="modal">Close</button>
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
                                 </td>
                                 <td class="align-middle">
-                                    <?php echo $order['status'];
-
-
-                                    ?>
-                                </td>
-                                <td class="align-middle">
-                                    <?php if ($order['status'] == 'pending') { ?>
-                                        <form method="post" action="">
-                                            <input type="hidden" name="order_id" value="<?php echo $order['order_id']; ?>">
-                                            <button type="submit" name="accept_order" class="btn btn-success">Accept</button>
-                                            <button type="submit" name="cancel_order" class="btn btn-danger">Cancel</button>
-                                        </form>
-                                    <?php } elseif ($order['status'] == 'accepted') { ?>
-                                        <form method="post" action="">
-                                            <input type="hidden" name="order_id" value="<?php echo $order['order_id']; ?>">
-                                            <button type="submit" name="deliver_order" class="btn btn-primary">Deliver</button>
-                                        </form>
-                                    <?php } elseif ($order['status'] == 'delivered') { ?>
-                                        Delivered at
-                                        <?php echo $order['order_time']; ?>
-                                    <?php } ?>
+                                    <?php echo $order['status']; ?>
                                 </td>
                             </tr>
                         <?php } ?>
@@ -196,7 +186,6 @@ class OrderManager
                 integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
                 crossorigin="anonymous"></script>
         </body>
-
         </html>
         <?php
     }

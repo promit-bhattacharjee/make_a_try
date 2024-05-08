@@ -1,24 +1,18 @@
 <?php
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['imageDataInput'])) {
-    // Get the base64-encoded image data from the POST request
     $base64ImageData = $_POST['imageDataInput'];
 
-    // Remove the data URI prefix (e.g., "data:image/png;base64,")
     $base64ImageData = preg_replace('/^data:image\/(png|jpeg|jpg);base64,/', '', $base64ImageData);
 
-    // Decode base64-encoded image data
     $imageData = base64_decode($base64ImageData);
 
-    // Create a temporary file to store the image data
     $tempFilename = tempnam(sys_get_temp_dir(), 'uploaded_image_');
     file_put_contents($tempFilename, $imageData);
 
-    // Create a cURL file object for file upload
     $file = curl_file_create($tempFilename, mime_content_type($tempFilename), basename($tempFilename));
 
-    // Update ngrok URL based on the currently generated URL
-    $apiEndpoint = 'https://f900-34-16-199-80.ngrok-free.app' . '/api/detect_landmarks';
+    $apiEndpoint = 'https://e5e3-34-138-181-3.ngrok-free.app' . '/api/detect_landmarks';
     $postData = ['image' => $file];
 
     $ch = curl_init($apiEndpoint);
@@ -32,17 +26,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['imageDataInput'])) {
     if ($response === false) {
         echo "cURL Error: " . curl_error($ch);
     } else {
-        // Print the response for debugging
-        echo "API Response: " . $response;
-
-        // Check if Flask API returned a valid response
-        $decodedResponse = json_decode($response, true);
+               $decodedResponse = json_decode($response, true);
         if ($decodedResponse) {
-            print_r($decodedResponse);
-            // Display the Flask API response (measurement)
-            // echo "Standard Width: " . $decodedResponse['standard_width'];
-            // echo "Min Width: " . $decodedResponse['min_width'];
-            // echo "Max Width: " . $decodedResponse['max_width'];
+            // print_r($decodedResponse);
+            echo ""?>
+            <html>
+                <head>
+                    <?php include('../components/DomHeader.php') ?>
+                </head>
+                <body>
+                <?php include('../components/DomHeader.php') ?>
+                <?php include('../components/navbar.php') ?>
+                <div>
+                    <div class="container" style="height:200px">
+
+                    </div>
+                    <div class="continer text-center m-auto text-middle">
+                      <h4>Your Required Sunglass size: <span class="text-success"><?php echo $decodedResponse['distance'] ?></span><small> (Centimeters)</small></h4>
+                      <span class="text-danger">bias=±2(Centimeters)</span>
+                    </div>
+                </div>
+       
+                <div class="fixed-bottom">
+                <?php include('../components/footer.php') ?>
+                </div>
+                <?php include('../components/DomFooter.php') ?>
+    
+                </body>
+    
+            </html>
+            <?php
         } else {
             echo "Error: Invalid response from Flask API";
         }
@@ -146,7 +159,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['imageDataInput'])) {
                         context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
                         if (showCircle) {
-                            // Draw a circle at 20 centimeters depth (adjust according to your needs)
                             const depth = 120; // centimeters
                             const circleRadius = 10; // pixels
 

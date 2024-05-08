@@ -113,6 +113,8 @@ class ProductAction
     private function alertMessage($message)
     {
         echo "<script>alert('$message');</script>";
+        sleep(5);
+        echo "<script>window.location.href = '../pages/productsList.php';</script>";
         exit;
     }
 }

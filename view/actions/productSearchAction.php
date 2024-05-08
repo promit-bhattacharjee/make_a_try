@@ -156,7 +156,8 @@ class ProductSearch
                                 </div>
                             </li>
                         </ul>
-                        <a href='#' class='btn btn-dark card-link d-flex justify-content-center'>Another link</a>
+                        <a href='"."http://localhost/makeATry/view/actions/addToCartAction.php? productId=$row[product_id]' class='btn btn-dark card-link d-flex justify-content-center'>Add To Cart</a>
+
                     </div>
                 </div>
             ";
@@ -221,7 +222,7 @@ class ProductSearch
             ?>
         </div>
     </main>
-    <div class="fixed-bottom">
+    <div class="">
     <?php require_once("../components/footer.php");?>
     </div>
 

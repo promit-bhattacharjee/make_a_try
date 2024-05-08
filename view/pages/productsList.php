@@ -1,4 +1,6 @@
-<?php 
+
+<?php
+require_once('../components/adminLoginChecking.php'); 
 class productsList{
     private $connect;
      function __construct() {

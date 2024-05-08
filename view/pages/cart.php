@@ -1,6 +1,7 @@
+<?php include("../components/userLoginChecker.php") ?>
 <?php
-session_start();
 $_SESSION['user_id'];
+
 class Cart
 {
   private $cart = [], $product = [], $userCartIds = [];
@@ -86,6 +87,11 @@ class showData
     }
     $_SESSION["total_price"]=$this->totalPrice;
   }
+ public function reloadPage() {
+
+    $url = $_SERVER['REQUEST_URI'];
+    header("Location: $url");
+}
   function quntityChecker(int $id)
   {
     foreach ($this->cart as $item) {
@@ -105,6 +111,7 @@ class showData
     } else {
       echo '<script>alert("Item removed from cart."); window.location.href = window.location.href;</script>';
     }
+    $this->reloadPage();
   }
   private function incrementQuantity($id)
   {
@@ -134,6 +141,7 @@ class showData
     } else {
       echo "<script>alert('Failed to fetch quantity from the database.');</script>";
     }
+    $this->reloadPage();
   }
   private function decrementQuantity($id)
   {
@@ -147,7 +155,7 @@ class showData
         echo "<script>alert('Product not found in the cart.');</script>";
       } else {
         $currentQuantity = $row['product_quantity'];
-
+        isset($currentQuantity) ?$currentQuantity = $row['product_quantity'] : $currentQuantity = 1 ;
         if ($currentQuantity == 1) {
           $this->remove($productId);
         } else {
@@ -166,6 +174,7 @@ class showData
     } else {
       echo "<script>alert('Failed to fetch quantity from the database.');</script>";
     }
+    $this->reloadPage();
   }
 
   public function displayCartItems()
@@ -232,7 +241,6 @@ class showData
                   'product_id' => $item['product_id'],
                   'product_model' => $item['product_model'],
                   'product_price' => $item['product_price'],
-                  'product_id' => $item['product_id'],
                   'product_quantity' => $this->quntityChecker($item['product_id']),
               ],
           ];
@@ -250,8 +258,11 @@ class showData
   
       // Redirect to the PDF generation script
       header("location: ../actions/generatePdfAction.php?jsonData=" . urlencode($jsonData));
-  
-      // Ensure that no further output is sent
+      $jsonData = "";
+      $$_SESSION['jsonData']="";
+      echo $jsonData;
+
+      $this->reloadPage();
       exit;
   }
   
